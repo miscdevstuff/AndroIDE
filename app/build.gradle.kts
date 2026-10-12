@@ -17,7 +17,6 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        // Lock architecture to ARM64
         ndk {
             abiFilters.add("arm64-v8a")
         }
@@ -53,10 +52,18 @@ dependencies {
     // Custom Dependencies
     implementation(libs.sora.editor)
     implementation(libs.sora.editor.lsp)
+    implementation(libs.sora.language.textmate)
+    implementation(libs.guava.conflict)
+    
     // Termux Modules
     implementation(libs.termux.terminal.view)
     implementation(libs.termux.shared)
+    
     // Navigation and Networking
     implementation(libs.androidx.navigation.compose)
     implementation(libs.okhttp)
+}
+
+configurations.all {
+    exclude(group = "com.google.guava", module = "listenablefuture")
 }

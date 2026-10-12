@@ -5,7 +5,7 @@ coreKtx = "1.17.0"
 lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.11.0"
 composeBom = "2025.10.01"
-sora = "0.24.6"
+sora = "0.23.6"
 termux = "v0.118.3"
 navCompose = "2.7.7"
 okhttp = "4.12.0"
@@ -27,12 +27,16 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
-# Custom Dependencies
+# Custom Dependencies (Stable 0.23.6)
 sora-editor = { group = "io.github.Rosemoe.sora-editor", name = "editor", version.ref = "sora" }
 sora-editor-lsp = { group = "io.github.Rosemoe.sora-editor", name = "editor-lsp", version.ref = "sora" }
+sora-language-textmate = { group = "io.github.Rosemoe.sora-editor", name = "language-textmate", version.ref = "sora" }
+guava-conflict = { group = "com.google.guava", name = "listenablefuture", version = "9999.0-empty-to-avoid-conflict-with-guava" }
+
 # Termux Modules
 termux-terminal-view = { group = "com.github.termux.termux-app", name = "terminal-view", version.ref = "termux" }
 termux-shared = { group = "com.github.termux.termux-app", name = "termux-shared", version.ref = "termux" }
+
 # Navigation and Networking
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navCompose" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }

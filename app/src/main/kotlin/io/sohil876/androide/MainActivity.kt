@@ -6,16 +6,23 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Terminal
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.Alignment
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import io.sohil876.androide.navigation.AppNavigation
+import io.sohil876.androide.navigation.AppRoute
 import io.sohil876.androide.ui.theme.ComposeEmptyActivityTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,34 +31,47 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeEmptyActivityTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                val navController = rememberNavController()
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        NavigationBar {
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val currentDestination = navBackStackEntry?.destination
+
+                            AppRoute.entries.forEach { route ->
+                                NavigationBarItem(
+                                    icon = {
+                                        val icon = when (route) {
+                                            AppRoute.Editor -> Icons.Default.Code
+                                            AppRoute.Terminal -> Icons.Default.Terminal
+                                            AppRoute.Tools -> Icons.Default.Build
+                                        }
+                                        Icon(icon, contentDescription = route.label)
+                                    },
+                                    label = { Text(route.label) },
+                                    selected = currentDestination?.hierarchy?.any { it.route == route.route } == true,
+                                    onClick = {
+                                        navController.navigate(route.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                ) { innerPadding ->
+                    AppNavigation(
+                        navController = navController,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Hello $name!"
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComposeEmptyActivityTheme {
-        Greeting("Android")
     }
 }
